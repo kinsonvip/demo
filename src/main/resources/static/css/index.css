@@ -1,0 +1,19 @@
+body{
+    background-image: url("../pictures/4.jpg");
+    background-size:cover;
+}
+
+#form{
+    background-color: #9EA9AA;
+    border-radius:15px;
+    filter:alpha(Opacity=70);
+    -moz-opacity:0.7;
+    opacity: 0.7;
+}
+
+#tittle{
+    margin-top: 10%;
+    text-align: center;
+    color: seagreen;
+    font-weight: bold;
+}
