@@ -49,10 +49,11 @@
         $('#myDataGrid').datagrid({
             dataSource: {
                 cols:[
-                    {name: 'name', label: '名字', width: 0.25},
-                    {name: 'address', label: '地址', width: 0.25},
-                    {name: 'fee', label: '金额', width: 0.25},
-                    {name: 'dates', label: '日期', width: 0.25}
+                    {name: 'name', label: '名字', width: 0.2},
+                    {name: 'address', label: '地址', width: 0.2},
+                    {name: 'fee', label: '金额', width: 0.2},
+                    {name: 'dates', label: '日期',width: 0.2},
+                    {name: 'operate', label: '操作', width: 0.2}
                 ],
                 remote: function(params) {
                     return {
@@ -67,7 +68,15 @@
             },
             states: {
                 pager: {page: 1,recPerPage: 3}
-            }
+            },
+            configs: {
+                C0: {},
+                C5: {html:true,className:'text-center'}
+            },
+            checkable: false,
+            checkByClickRow: false,
+            showRowIndex: true
+
             // ... 其他初始化选项
         });
 
@@ -85,7 +94,9 @@
                 recTotal: 1000
             });*/
         });
+
     })
+
 </script>
 
 </body>

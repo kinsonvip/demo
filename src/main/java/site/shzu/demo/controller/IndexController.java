@@ -2,6 +2,7 @@ package site.shzu.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,12 @@ public class IndexController {
         int pageNum = Integer.valueOf(request.getParameter("page"));
         int pageSize = Integer.valueOf(request.getParameter("recPerPage"));
         PageHelper.startPage(pageNum, pageSize);
-        List<Orders> list = ordersService.getAllOrders();
+        List<HashMap> list = ordersService.getAllOrders();
+
+        List<HashMap> data = PagerUtil.formatAddOpetate(list);
+
         PageInfo page = new PageInfo(list);
         Pager pager = PagerUtil.getPager(page);
-
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(list));
 
         HashMap<Object,Object> map = new HashMap<>();
         map.put("result","success");

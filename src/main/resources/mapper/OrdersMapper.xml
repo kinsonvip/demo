@@ -9,9 +9,8 @@
     <result column="dates" jdbcType="DATE" property="dates" />
   </resultMap>
 
-
-  <select id="selectAllOrders" resultType="site.shzu.demo.model.Orders">
-    select * from orders
+  <select id="selectAllOrders" resultType="java.util.HashMap">
+    select o.id,o.name,o.address,o.fee,DATE_FORMAT(o.dates,'%Y-%m-%d') dates from orders o
   </select>
 
   <sql id="Base_Column_List">

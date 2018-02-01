@@ -3,8 +3,8 @@ package site.shzu.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.shzu.demo.dao.OrdersDao;
-import site.shzu.demo.model.Orders;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class OrdersService {
     @Autowired
     OrdersDao ordersDao;
 
-    public List<Orders> getAllOrders(){
+    public List<HashMap> getAllOrders(){
         return ordersDao.selectAllOrders();
     }
 }

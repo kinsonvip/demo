@@ -3,6 +3,7 @@ package site.shzu.demo.dao;
 import org.apache.ibatis.annotations.Mapper;
 import site.shzu.demo.model.Orders;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -13,7 +14,7 @@ public interface OrdersDao {
 
     int insertSelective(Orders record);
 
-    List<Orders> selectAllOrders();
+    List<HashMap> selectAllOrders();
 
     Orders selectByPrimaryKey(Integer id);
 
