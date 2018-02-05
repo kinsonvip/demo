@@ -17,14 +17,14 @@
 
     <div class="row" style="height: auto;margin-top: 100px">
         <div class="col-md-4 col-md-offset-4" >
-            <form>
+            <form action="login" method="get">
                 <div class="form-group input-control has-icon-left">
-                    <input id="user" type="text" class="form-control" placeholder="账    号">
-                    <label for="user" class="input-control-icon-left"><i class="icon icon-user "></i></label>
+                    <input id="userName" name="userName" type="text" class="form-control" placeholder="账    号">
+                    <label for="userName" class="input-control-icon-left"><i class="icon icon-user "></i></label>
                 </div>
                 <div class="form-group input-control has-icon-left">
-                    <input id="pswd" type="text" class="form-control" placeholder="密    码">
-                    <label for="pswd" class="input-control-icon-left"><i class="icon icon-key "></i></label>
+                    <input id="passWord" name="passWord" type="text" class="form-control" placeholder="密    码">
+                    <label for="passWord" class="input-control-icon-left"><i class="icon icon-key "></i></label>
                 </div>
 
                 <button type="submit" class="btn btn-primary">提交</button>
