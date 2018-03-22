@@ -1,33 +1,85 @@
 package site.shzu.demo.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Date;
 
-/**
- * @Author: Kinson
- * @Description: 用户实体类
- * @Date: Created in 2018/02/05 21:13
- * @Version: 1.0
- */
 public class User {
-    @NotEmpty(message = "用户名不能为空")
-    private String userName;
+    private Integer id;
 
-    @NotEmpty(message = "密码不能为空")
-    private String passWord;
+    private String name;
 
-    public String getUserName() {
-        return userName;
+    private String pswd;
+
+    private String nickname;
+
+    private String email;
+
+    private Date createTime;
+
+    private Date lastLoginTime;
+
+    private Integer status;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getName() {
+        return name;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getPswd() {
+        return pswd;
+    }
+
+    public void setPswd(String pswd) {
+        this.pswd = pswd == null ? null : pswd.trim();
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname == null ? null : nickname.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

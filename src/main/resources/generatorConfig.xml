@@ -64,13 +64,41 @@
         <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
             是否生成 example类 -->
 
-        <table tableName="orders" domainObjectName="Orders" mapperName="OrdersDao"
+        <!--<table tableName="orders" domainObjectName="Orders" mapperName="OrdersDao"
                enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false">
-            <!-- Mysql自增键 -->
+            &lt;!&ndash; Mysql自增键 &ndash;&gt;
             <generatedKey column="id" sqlStatement="Mysql"/>
-            <!-- oracle自增键 -->
-            <!--<generatedKey column="id" sqlStatement="select SEQ_ID.nextval from dual"/>-->
+            &lt;!&ndash; oracle自增键 &ndash;&gt;
+            &lt;!&ndash;<generatedKey column="id" sqlStatement="select SEQ_ID.nextval from dual"/>&ndash;&gt;
+        </table>-->
+
+        <table tableName="user" domainObjectName="User" mapperName="UserDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="id" sqlStatement="Mysql"/>
+        </table>
+
+        <table tableName="role" domainObjectName="Role" mapperName="RoleDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="id" sqlStatement="Mysql"/>
+        </table>
+
+        <table tableName="permission" domainObjectName="Permission" mapperName="PermissionDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="id" sqlStatement="Mysql"/>
+        </table>
+
+        <table tableName="user_role" domainObjectName="UserRole" mapperName="UserRoleDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+
+        <table tableName="role_permission" domainObjectName="RolePermission" mapperName="RolePermissionDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
         </table>
 
     </context>
