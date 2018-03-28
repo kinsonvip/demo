@@ -64,6 +64,13 @@
                         // 数据类型
                         dataType: 'json'
                     };
+                },
+                remoteConverter:function (responseData,textStatus,jqXHR,datagrid) {
+                    for(var i = 0;i < responseData.data.length;i++){
+                        //添加操作按钮
+                        responseData.data[i].operate= '<button class=\"btn btn-sm btn-info \" type=\"button\"><i class=\"icon icon-edit\"></i>编辑</button>';
+                    }
+                    return responseData;
                 }
             },
             states: {
