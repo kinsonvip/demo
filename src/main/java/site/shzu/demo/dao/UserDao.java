@@ -1,7 +1,11 @@
 package site.shzu.demo.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import site.shzu.demo.model.User;
 
+import java.util.List;
+
+@Mapper
 public interface UserDao {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +18,6 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<User> selectByUser (User user);
 }

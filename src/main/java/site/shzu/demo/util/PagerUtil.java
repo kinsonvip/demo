@@ -26,7 +26,7 @@ public class PagerUtil {
     public static List<HashMap> formatAddOpetate(List<HashMap> list){
         List rtn = new ArrayList();
         for(HashMap map : list){
-            map.put("operate","<button class=\"btn btn-sm btn-info \" type=\"button\"><i class=\"icon icon-edit\"></i>编辑</button>");
+            //map.put("operate","<button class=\"btn btn-sm btn-info \" type=\"button\"><i class=\"icon icon-edit\"></i>编辑</button>");
             rtn.add(map);
         }
         return rtn;

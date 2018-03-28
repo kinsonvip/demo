@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -67,12 +70,12 @@ public class IndexController {
         return map;
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String test(){
-        return "grid";
+        return "login";
     }
 
-    @RequestMapping("/login")
+/*    @RequestMapping("/login")
     @ResponseBody
     public String login(@Validated User user,BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -91,6 +94,28 @@ public class IndexController {
 //            resultMap.put("msg", msg.toString());
             return  info;
         }
-        return "login in success:"+user.getUserName()+"##"+user.getPassWord();
+        return "login in success:"+user.getName()+"##"+user.getPswd();
+    }*/
+
+    /**
+     * ajax登录请求
+     * @param userName
+     * @param passWord
+     * @return
+     */
+    @RequestMapping(value="/ajaxLogin",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> ajaxLogin(String userName, String passWord,Model model) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
+            SecurityUtils.getSubject().login(token);
+            resultMap.put("status", 200);
+            resultMap.put("message", "登录成功");
+        } catch (Exception e) {
+            resultMap.put("status", 500);
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
     }
 }
