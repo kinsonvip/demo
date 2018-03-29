@@ -72,15 +72,15 @@ public class MyShiroRealm extends AuthorizingRealm {
         List<User> userList = userService.selectByUser(user);
         if(userList.size()!=0){
             user = userList.get(0);
-            System.out.println("登陆成功了");
+            System.out.println("账号密码验证通过！");
         }
-        if (null == user) {
+        if (userList.size()==0) {
             throw new AccountException("帐号或密码不正确！");
         }else if(user.getStatus()==0){
             /**
              * 如果用户的status为禁用。那么就抛出<code>DisabledAccountException</code>
              */
-            throw new DisabledAccountException("帐号已经禁止登录！");
+            throw new DisabledAccountException("帐号已经被禁止登录！");
         }else{
             //更新登录时间 last login time
             user.setLastLoginTime(new Date());

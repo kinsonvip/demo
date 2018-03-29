@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
@@ -107,9 +108,11 @@ public class IndexController {
     @ResponseBody
     public Map<String,Object> ajaxLogin(String userName, String passWord,Model model) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
+        Subject subject = SecurityUtils.getSubject();
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
-            SecurityUtils.getSubject().login(token);
+            subject.login(token);
+            User user = (User)subject.getPrincipal();
             resultMap.put("status", 200);
             resultMap.put("message", "登录成功");
         } catch (Exception e) {

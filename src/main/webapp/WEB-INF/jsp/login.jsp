@@ -16,7 +16,7 @@
 
     <div class="row" style="height: auto;margin-top: 100px">
         <div class="col-md-4 col-md-offset-4" >
-            <form action="/ajaxLogin" method="POST">
+            <form action="ajaxLogin" method="POST">
                 <div class="form-group input-control has-icon-left">
                     <input id="userName" name="userName" type="text" class="form-control" placeholder="账    号">
                     <label for="userName" class="input-control-icon-left"><i class="icon icon-user "></i></label>
