@@ -7,11 +7,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import site.shzu.demo.dao.UserDao;
 import site.shzu.demo.model.User;
 import site.shzu.demo.service.UserService;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Kinson
@@ -26,9 +28,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("权限授权方法：MyShiroRealm.doGetAuthenticationInfo()");
-        User token = (User) SecurityUtils.getSubject().getPrincipal();
-        String userId = String.valueOf(token.getId());
+        System.out.println("权限授权方法：MyShiroRealm.doGetAuthorizationInfo()");
+        //User token = (User) SecurityUtils.getSubject().getPrincipal();
+        //String userId = String.valueOf(token.getId());
+        Integer userId = (Integer)SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
         //根据用户ID查询角色（role），放入到Authorization里。
 	    /*Map<String, Object> map = new HashMap<String, Object>();
@@ -40,7 +43,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 	    }*/
         //实际开发，当前登录用户的角色和权限信息是从数据库来获取的，我这里写死是为了方便测试
         Set<String> roleSet = new HashSet<String>();
-        roleSet.add("100002");
+        roleSet.add("1");
         info.setRoles(roleSet);
         //根据用户ID查询权限（permission），放入到Authorization里。
 	    /*List<SysPermission> permissionList = sysPermissionService.selectByMap(map);
@@ -49,7 +52,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		permissionSet.add(Permission.getName());
 	    }*/
         Set<String> permissionSet = new HashSet<String>();
-        permissionSet.add("权限添加");
+        permissionSet.add("查看表格");
         info.setStringPermissions(permissionSet);
         return info;
     }
@@ -86,6 +89,6 @@ public class MyShiroRealm extends AuthorizingRealm {
             user.setLastLoginTime(new Date());
             userService.updateById(user);
         }
-        return new SimpleAuthenticationInfo(user, user.getPswd(), getName());
+        return new SimpleAuthenticationInfo(user.getId(), user.getPswd(), getName());
     }
 }

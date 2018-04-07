@@ -1,7 +1,11 @@
 package site.shzu.demo.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import site.shzu.demo.model.Permission;
 
+import java.util.List;
+
+@Mapper
 public interface PermissionDao {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +18,6 @@ public interface PermissionDao {
     int updateByPrimaryKeySelective(Permission record);
 
     int updateByPrimaryKey(Permission record);
+
+    List<Permission> selectAllPermission();
 }

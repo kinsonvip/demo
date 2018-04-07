@@ -1,8 +1,6 @@
 package site.shzu.demo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
@@ -11,16 +9,11 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import site.shzu.demo.model.Orders;
 import site.shzu.demo.model.User;
 import site.shzu.demo.service.OrdersService;
 import site.shzu.demo.util.Pager;
@@ -29,7 +22,6 @@ import site.shzu.demo.util.PagerUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -76,6 +68,11 @@ public class IndexController {
         return "login";
     }
 
+    @RequestMapping("/grid")
+    public String grid(){
+        return "grid";
+    }
+
 /*    @RequestMapping("/login")
     @ResponseBody
     public String login(@Validated User user,BindingResult bindingResult){
@@ -108,11 +105,9 @@ public class IndexController {
     @ResponseBody
     public Map<String,Object> ajaxLogin(String userName, String passWord,Model model) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        Subject subject = SecurityUtils.getSubject();
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
-            subject.login(token);
-            User user = (User)subject.getPrincipal();
+            SecurityUtils.getSubject().login(token);
             resultMap.put("status", 200);
             resultMap.put("message", "登录成功");
         } catch (Exception e) {

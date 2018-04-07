@@ -14,7 +14,7 @@
 <body>
 
 <div class="container">
-
+    <button id="logout" class="btn" type="button">退出</button>
     <div class="row" style="height: auto;margin-top: 100px">
         <div class="col-md-4 col-md-offset-4" >
             <form action="login" method="get">
@@ -45,6 +45,10 @@
 <script src="zui/js/zui.min.js"></script>
 <script src="zui/lib/datagrid/zui.datagrid.min.js"></script>
 <script type="text/javascript">
+    $("#logout").click(function(){
+        location.href="/demo/logout";
+    });
+
     $(function(){
         $('#myDataGrid').datagrid({
             dataSource: {

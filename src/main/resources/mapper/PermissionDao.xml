@@ -9,6 +9,9 @@
   <sql id="Base_Column_List">
     id, url, desc
   </sql>
+  <select id="selectAllPermission" resultMap="BaseResultMap">
+    select * from permission order by id desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
