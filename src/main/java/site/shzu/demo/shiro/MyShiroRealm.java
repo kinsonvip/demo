@@ -8,6 +8,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import site.shzu.demo.model.User;
+import site.shzu.demo.service.RolePermissionService;
+import site.shzu.demo.service.UserRoleService;
 import site.shzu.demo.service.UserService;
 
 import java.util.Date;
@@ -24,35 +26,32 @@ import java.util.Set;
 public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
+
+    @Autowired
+    UserRoleService userRoleService;
+
+    @Autowired
+    RolePermissionService rolePermissionService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("权限授权方法：MyShiroRealm.doGetAuthorizationInfo()");
-        //User token = (User) SecurityUtils.getSubject().getPrincipal();
-        //String userId = String.valueOf(token.getId());
         Integer userId = (Integer)SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
         //根据用户ID查询角色（role），放入到Authorization里。
-	    /*Map<String, Object> map = new HashMap<String, Object>();
-	    map.put("user_id", userId);
-	    List<SysRole> roleList = sysRoleService.selectByMap(map);
+        List<String> roleList = userRoleService.selectRoleByUserId(userId);
 	    Set<String> roleSet = new HashSet<String>();
-	    for(SysRole role : roleList){
-		roleSet.add(role.getType());
-	    }*/
-        //实际开发，当前登录用户的角色和权限信息是从数据库来获取的，我这里写死是为了方便测试
-        Set<String> roleSet = new HashSet<String>();
-        roleSet.add("1");
+	    for(String role : roleList){
+		roleSet.add(role);
+	    }
         info.setRoles(roleSet);
         //根据用户ID查询权限（permission），放入到Authorization里。
-	    /*List<SysPermission> permissionList = sysPermissionService.selectByMap(map);
+        List<String> permissionList = rolePermissionService.selectPermissionByUserId(userId);
 	    Set<String> permissionSet = new HashSet<String>();
-	    for(SysPermission Permission : permissionList){
-		permissionSet.add(Permission.getName());
-	    }*/
-        Set<String> permissionSet = new HashSet<String>();
-        permissionSet.add("查看表格");
+	    for(String urlDesc : permissionList){
+		permissionSet.add(urlDesc);
+	    }
         info.setStringPermissions(permissionSet);
         return info;
     }

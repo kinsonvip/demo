@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import site.shzu.demo.model.Permission;
+import site.shzu.demo.model.PermissionInit;
+import site.shzu.demo.service.PermissionInitService;
 import site.shzu.demo.service.PermissionService;
 import site.shzu.demo.shiro.MyShiroRealm;
 
@@ -28,7 +30,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
     @Autowired
-    private PermissionService permissionService;
+    private PermissionInitService permissionInitService;
 
     @Value("${spring.redis.host}")
     private String host;
@@ -60,22 +62,9 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         // 拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        /*// 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/icon/**", "anon");
-        filterChainDefinitionMap.put("/jquery/**", "anon");
-        filterChainDefinitionMap.put("/pictures/**", "anon");
-        filterChainDefinitionMap.put("/zui/**", "anon");
-        filterChainDefinitionMap.put("/ajaxLogin", "anon");
-        // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/grid", "perms[查看表格]");
-        // <!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
-        // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "authc");*/
-        List<Permission> pl = permissionService.selectAllPermission();
-        for(Permission permission : pl){
-            filterChainDefinitionMap.put(permission.getUrl(),permission.getDesc());
+        List<PermissionInit> pil = permissionInitService.selectAllPermissionInit();
+        for(PermissionInit permissionInit : pil){
+            filterChainDefinitionMap.put(permissionInit.getUrl(),permissionInit.getPermissioninit());
         }
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         System.out.println("Shiro拦截器工厂类注入成功");

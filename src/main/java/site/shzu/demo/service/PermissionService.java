@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class PermissionService {
     @Autowired
-    private PermissionDao permissionDao;
+    PermissionDao permissionDao;
 
     public List<Permission> selectAllPermission(){
         return permissionDao.selectAllPermission();

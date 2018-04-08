@@ -73,7 +73,7 @@
             &lt;!&ndash;<generatedKey column="id" sqlStatement="select SEQ_ID.nextval from dual"/>&ndash;&gt;
         </table>-->
 
-        <table tableName="user" domainObjectName="User" mapperName="UserDao"
+        <!--<table tableName="user" domainObjectName="User" mapperName="UserDao"
                enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false">
             <generatedKey column="id" sqlStatement="Mysql"/>
@@ -100,6 +100,11 @@
                enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false">
         </table>
+
+        <table tableName="permission_init" domainObjectName="PermissionInit" mapperName="PermissionInitDao"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>-->
 
     </context>
 </generatorConfiguration>

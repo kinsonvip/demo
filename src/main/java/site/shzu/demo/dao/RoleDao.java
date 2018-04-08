@@ -1,7 +1,9 @@
 package site.shzu.demo.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import site.shzu.demo.model.Role;
 
+@Mapper
 public interface RoleDao {
     int deleteByPrimaryKey(Integer id);
 
