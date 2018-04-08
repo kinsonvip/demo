@@ -5,10 +5,10 @@
     <result column="rid" jdbcType="INTEGER" property="rid" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
   </resultMap>
-  <select id="selectPermissionByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+  <select id="selectPermissionByUserId" parameterType="site.shzu.demo.model.User" resultType="java.lang.String">
     select p.desc
     from user u,role r,permission p,user_role ur,role_permission rp
-    where u.id=ur.uid and r.id=ur.rid and r.id=rp.rid and p.id=rp.pid and u.id=#{userId}
+    where u.id=ur.uid and r.id=ur.rid and r.id=rp.rid and p.id=rp.pid and u.id=#{id}
   </select>
   <insert id="insert" parameterType="site.shzu.demo.model.RolePermission">
     insert into role_permission (rid, pid)

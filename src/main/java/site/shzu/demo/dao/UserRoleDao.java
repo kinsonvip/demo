@@ -1,7 +1,7 @@
 package site.shzu.demo.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import site.shzu.demo.model.User;
 import site.shzu.demo.model.UserRole;
 
 import java.util.List;
@@ -12,5 +12,5 @@ public interface UserRoleDao {
 
     int insertSelective(UserRole record);
 
-    List<String> selectRoleByUserId(@Param(value = "userId") Integer userId);
+    List<String> selectRoleByUserId(User user);
 }

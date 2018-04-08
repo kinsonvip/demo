@@ -1,8 +1,8 @@
 package site.shzu.demo.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import site.shzu.demo.model.RolePermission;
+import site.shzu.demo.model.User;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface RolePermissionDao {
 
     int insertSelective(RolePermission record);
 
-    List<String> selectPermissionByUserId(@Param(value = "userId") Integer userId);
+    List<String> selectPermissionByUserId(User user);
 }

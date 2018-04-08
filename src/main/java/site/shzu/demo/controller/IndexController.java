@@ -103,10 +103,10 @@ public class IndexController {
      */
     @RequestMapping(value="/ajaxLogin",method=RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> ajaxLogin(String userName, String passWord,Model model) {
+    public Map<String,Object> ajaxLogin(String userName, String passWord,Boolean rememberMe,Model model) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
+            UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord, rememberMe);
             SecurityUtils.getSubject().login(token);
             resultMap.put("status", 200);
             resultMap.put("message", "登录成功");

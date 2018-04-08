@@ -37,17 +37,18 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("权限授权方法：MyShiroRealm.doGetAuthorizationInfo()");
-        Integer userId = (Integer)SecurityUtils.getSubject().getPrincipal();
+        //Integer userId = (Integer)SecurityUtils.getSubject().getPrincipal();
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
         //根据用户ID查询角色（role），放入到Authorization里。
-        List<String> roleList = userRoleService.selectRoleByUserId(userId);
+        List<String> roleList = userRoleService.selectRoleByUserId(user);
 	    Set<String> roleSet = new HashSet<String>();
 	    for(String role : roleList){
 		roleSet.add(role);
 	    }
         info.setRoles(roleSet);
         //根据用户ID查询权限（permission），放入到Authorization里。
-        List<String> permissionList = rolePermissionService.selectPermissionByUserId(userId);
+        List<String> permissionList = rolePermissionService.selectPermissionByUserId(user);
 	    Set<String> permissionSet = new HashSet<String>();
 	    for(String urlDesc : permissionList){
 		permissionSet.add(urlDesc);
@@ -88,6 +89,6 @@ public class MyShiroRealm extends AuthorizingRealm {
             user.setLastLoginTime(new Date());
             userService.updateById(user);
         }
-        return new SimpleAuthenticationInfo(user.getId(), user.getPswd(), getName());
+        return new SimpleAuthenticationInfo(user, user.getPswd(), getName());
     }
 }

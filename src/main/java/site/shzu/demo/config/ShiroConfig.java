@@ -1,8 +1,11 @@
 package site.shzu.demo.config;
 
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
@@ -34,6 +37,9 @@ public class ShiroConfig {
 
     @Value("${spring.redis.host}")
     private String host;
+
+    @Value("${spring.redis.timeout}")
+    private int timeout;
 
     @Value("${spring.redis.port}")
     private int port;
@@ -79,6 +85,8 @@ public class ShiroConfig {
         securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(SessionManager());
+        //注入记住我管理器;
+        securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
     }
     /**
@@ -101,10 +109,9 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
         redisManager.setPort(port);
-        redisManager.setExpire(1800);// 配置过期时间
+        redisManager.setExpire(1800);// 配置过期时间1800
         redisManager.setPassword(password);
-        // redisManager.setTimeout(timeout);
-        // redisManager.setPassword(password);
+        redisManager.setTimeout(timeout);
         return redisManager;
     }
 
@@ -134,7 +141,30 @@ public class ShiroConfig {
     public DefaultWebSessionManager SessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(redisSessionDAO());
+        sessionManager.setDeleteInvalidSessions(true);
         return sessionManager;
     }
 
+    /**
+     * cookie对象;
+     * @return
+     */
+    public SimpleCookie rememberMeCookie(){
+        //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        //<!-- 记住我cookie生效时间7天 ,单位秒604800;-->
+        simpleCookie.setMaxAge(604800);
+        return simpleCookie;
+    }
+    /**
+     * cookie管理对象;记住我功能
+     * @return
+     */
+    public CookieRememberMeManager rememberMeManager(){
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(rememberMeCookie());
+        //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
+        cookieRememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
+        return cookieRememberMeManager;
+    }
 }

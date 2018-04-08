@@ -6,6 +6,8 @@ import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import site.shzu.demo.model.Permission;
+import site.shzu.demo.model.PermissionInit;
+import site.shzu.demo.service.PermissionInitService;
 import site.shzu.demo.service.PermissionService;
 
 import java.util.LinkedHashMap;
@@ -23,7 +25,7 @@ public class ShiroService {
     ShiroFilterFactoryBean shiroFilterFactoryBean;
 
     @Autowired
-    PermissionService permissionService;
+    PermissionInitService permissionInitService;
 
     /**
      * 初始化权限
@@ -31,9 +33,9 @@ public class ShiroService {
      */
     public Map<String, String> loadFilterChainDefinitions() {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        List<Permission> pl = permissionService.selectAllPermission();
-        for(Permission permission : pl){
-            filterChainDefinitionMap.put(permission.getUrl(),permission.getDesc());
+        List<PermissionInit> pil = permissionInitService.selectAllPermissionInit();
+        for(PermissionInit permissionInit : pil){
+            filterChainDefinitionMap.put(permissionInit.getUrl(),permissionInit.getPermissioninit());
         }
         return filterChainDefinitionMap;
     }

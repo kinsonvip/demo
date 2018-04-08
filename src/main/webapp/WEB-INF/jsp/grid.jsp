@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
@@ -14,7 +15,10 @@
 <body>
 
 <div class="container">
-    <button id="logout" class="btn" type="button">退出</button>
+    <shiro:user>
+        欢迎[<shiro:principal property="nickname"/>]登录，<a href="${pageContext.request.contextPath}/logout">退出</a>
+    </shiro:user>
+    <%--<button id="logout" class="btn" type="button">退出</button>--%>
     <div class="row" style="height: auto;margin-top: 100px">
         <div class="col-md-4 col-md-offset-4" >
             <form action="login" method="get">

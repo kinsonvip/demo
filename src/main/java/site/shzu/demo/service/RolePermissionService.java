@@ -3,6 +3,7 @@ package site.shzu.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.shzu.demo.dao.RolePermissionDao;
+import site.shzu.demo.model.User;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class RolePermissionService {
     @Autowired
     RolePermissionDao rolePermissionDao;
 
-    public List<String> selectPermissionByUserId(Integer userId){
-        return rolePermissionDao.selectPermissionByUserId(userId);
+    public List<String> selectPermissionByUserId(User user){
+        return rolePermissionDao.selectPermissionByUserId(user);
     }
 }
