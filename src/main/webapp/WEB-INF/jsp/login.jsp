@@ -27,6 +27,10 @@
                     <label for="passWord" class="input-control-icon-left"><i class="icon icon-key "></i></label>
                 </div>
                 <div class="form-group input-control has-icon-left">
+                    验证码：<input type="text" name="vcode" id="vcode"/>
+                    <img alt="验证码" src="/demo/getGifCode">
+                </div>
+                <div class="form-group input-control has-icon-left">
                     <P><input type="checkbox" name="rememberMe"  id="rememberMe" />记住我</P>
                 </div>
                 <%--<button id="ajaxLogin" class="btn btn-primary">提交</button>--%>
@@ -44,10 +48,12 @@
         $("#ajaxLogin").click(function() {
             var userName = $("#userName").val();
             var passWord = $("#passWord").val();
+            var vcode = $("#vcode").val();
             var rememberMe =$('#rememberMe').is(':checked');
             $.post("/demo/ajaxLogin", {
                 "userName" : userName,
                 "passWord" : passWord,
+                "vcode" : vcode,
                 "rememberMe" : rememberMe
             }, function(result) {
                 if (result.status == 200) {

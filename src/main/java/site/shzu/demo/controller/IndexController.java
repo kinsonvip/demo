@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,8 +19,12 @@ import site.shzu.demo.model.User;
 import site.shzu.demo.service.OrdersService;
 import site.shzu.demo.util.Pager;
 import site.shzu.demo.util.PagerUtil;
+import site.shzu.demo.vcode.Captcha;
+import site.shzu.demo.vcode.GifCaptcha;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,8 +108,27 @@ public class IndexController {
      */
     @RequestMapping(value="/ajaxLogin",method=RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> ajaxLogin(String userName, String passWord,Boolean rememberMe,Model model) {
+    public Map<String,Object> ajaxLogin(String userName, String passWord,String vcode,Boolean rememberMe,Model model) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        if(vcode==null||vcode==""){
+            resultMap.put("status", 500);
+            resultMap.put("message", "验证码不能为空！");
+            return resultMap;
+        }
+
+        Session session = SecurityUtils.getSubject().getSession();
+        //转化成小写字母
+        vcode = vcode.toLowerCase();
+        String v = (String) session.getAttribute("_code");
+        //还可以读取一次后把验证码清空，这样每次登录都必须获取验证码
+        //session.removeAttribute("_come");
+        if(!vcode.equals(v)){
+            resultMap.put("status", 500);
+            resultMap.put("message", "验证码错误！");
+            return resultMap;
+        }
+
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord, rememberMe);
             SecurityUtils.getSubject().login(token);
@@ -115,5 +139,30 @@ public class IndexController {
             resultMap.put("message", e.getMessage());
         }
         return resultMap;
+    }
+
+    /**
+     * 获取验证码（Gif版本）
+     */
+    @RequestMapping(value="getGifCode",method=RequestMethod.GET)
+    public void getGifCode(HttpServletResponse response, HttpServletRequest request){
+        try {
+            response.setHeader("Pragma", "No-cache");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setDateHeader("Expires", 0);
+            response.setContentType("image/gif");
+            /**
+             * gif格式动画验证码
+             * 宽，高，位数。
+             */
+            Captcha captcha = new GifCaptcha(146,33,4);
+            //输出
+            captcha.out(response.getOutputStream());
+            HttpSession session = request.getSession(true);
+            //存入Session
+            session.setAttribute("_code",captcha.text().toLowerCase());
+        } catch (Exception e) {
+            System.err.println("获取验证码异常："+e.getMessage());
+        }
     }
 }

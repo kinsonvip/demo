@@ -1,10 +1,10 @@
 package site.shzu.demo.config;
 
 import org.apache.shiro.codec.Base64;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import site.shzu.demo.model.Permission;
 import site.shzu.demo.model.PermissionInit;
 import site.shzu.demo.service.PermissionInitService;
-import site.shzu.demo.service.PermissionService;
 import site.shzu.demo.shiro.MyShiroRealm;
 
 import java.util.LinkedHashMap;
@@ -109,7 +107,7 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
         redisManager.setPort(port);
-        redisManager.setExpire(1800);// 配置过期时间1800
+        redisManager.setExpire(1800);// 配置过期时间1800秒
         redisManager.setPassword(password);
         redisManager.setTimeout(timeout);
         return redisManager;
@@ -129,6 +127,7 @@ public class ShiroConfig {
     /**
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      */
+    @Bean
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
@@ -138,10 +137,10 @@ public class ShiroConfig {
     /**
      * shiro session的管理
      */
+    @Bean
     public DefaultWebSessionManager SessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(redisSessionDAO());
-        sessionManager.setDeleteInvalidSessions(true);
         return sessionManager;
     }
 
