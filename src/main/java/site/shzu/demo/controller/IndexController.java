@@ -141,6 +141,12 @@ public class IndexController {
         return resultMap;
     }
 
+    //被踢出后跳转的页面
+    @RequestMapping(value="kickout")
+    public String kickout() {
+        return "kickout";
+    }
+
     /**
      * 获取验证码（Gif版本）
      */

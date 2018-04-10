@@ -17,7 +17,9 @@ import org.springframework.context.annotation.Configuration;
 import site.shzu.demo.model.PermissionInit;
 import site.shzu.demo.service.PermissionInitService;
 import site.shzu.demo.shiro.MyShiroRealm;
+import site.shzu.demo.shiro.filter.KickoutSessionControlFilter;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +66,14 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
-        // 拦截器.
+
+        //自定义拦截器
+        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
+        //限制同一帐号同时在线的个数。
+        filtersMap.put("kickout", kickoutSessionControlFilter());
+        shiroFilterFactoryBean.setFilters(filtersMap);
+
+        // 权限控制Map
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         List<PermissionInit> pil = permissionInitService.selectAllPermissionInit();
         for(PermissionInit permissionInit : pil){
@@ -82,7 +91,7 @@ public class ShiroConfig {
         // 自定义缓存实现 使用redis
         securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
-        securityManager.setSessionManager(SessionManager());
+        securityManager.setSessionManager(sessionManager());
         //注入记住我管理器;
         securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
@@ -138,7 +147,7 @@ public class ShiroConfig {
      * shiro session的管理
      */
     @Bean
-    public DefaultWebSessionManager SessionManager() {
+    public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
@@ -165,5 +174,26 @@ public class ShiroConfig {
         //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
         cookieRememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
         return cookieRememberMeManager;
+    }
+
+    /**
+     * 限制同一账号登录同时登录人数控制
+     * @return
+     */
+    public KickoutSessionControlFilter kickoutSessionControlFilter(){
+        KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
+        //使用cacheManager获取相应的cache来缓存用户登录的会话；用于保存用户—会话之间的关系的；
+        //这里我们还是用之前shiro使用的redisManager()实现的cacheManager()缓存管理
+        //也可以重新另写一个，重新配置缓存时间之类的自定义缓存属性
+        kickoutSessionControlFilter.setCacheManager(cacheManager());
+        //用于根据会话ID，获取会话进行踢出操作的；
+        kickoutSessionControlFilter.setSessionManager(sessionManager());
+        //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。
+        kickoutSessionControlFilter.setKickoutAfter(false);
+        //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
+        kickoutSessionControlFilter.setMaxSession(1);
+        //被踢出后重定向到的地址；
+        kickoutSessionControlFilter.setKickoutUrl("/kickout");
+        return kickoutSessionControlFilter;
     }
 }
