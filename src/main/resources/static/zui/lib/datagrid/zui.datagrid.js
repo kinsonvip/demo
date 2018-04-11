@@ -1,5 +1,5 @@
 /*!
- * ZUI: 数据表格② - v1.8.1 - 2018-01-18
+ * ZUI: 数据表格② - v1.8.1 - 2018-03-21
  * http://zui.sexy
  * GitHub: https://github.com/easysoft/zui.git 
  * Copyright (c) 2018 cnezsoft.com; Licensed MIT
@@ -499,8 +499,6 @@
 
         that.setDataSource(options.dataSource);
 
-        that.render(true);
-
         if (options.responsive) {
             var lastContainerWidth = $container.width();
             $container.on('resize', function() {
@@ -589,6 +587,8 @@
                 });
             }
         }
+
+        that.render();
     };
 
     DataGrid.prototype.setPager = function(page, recTotal, recPerPage) {
@@ -628,8 +628,8 @@
         that.pager = pager;
 
         if (oldPager.page !== pager.page || oldPager.recTotal !== pager.recTotal || oldPager.recPerPage !== pager.recPerPage) {
-            that.layout.cols = null;
             that.scroll(0, 0);
+            that.layout.cols = null;
         }
         return that;
     };
@@ -826,7 +826,15 @@
                                 onFinish(false, that.lang['errorCannotHandleRemoteData'], responseData);
                             }
                         },
-                        error: function() {
+                        error: function(jqXHR) {
+                            //重定向
+                            if("REDIRECT" == jqXHR.getResponseHeader("REDIRECT")){ //若HEADER中含有REDIRECT说明后端想重定向，
+                                var win = window;
+                                while(win != win.top){
+                                    win = win.top;
+                                }
+                                win.location.href = jqXHR.getResponseHeader("CONTENTPATH");//将后端重定向的地址取出来,使用win.location.href去实现重定向的要求
+                            }
                             onFinish(false, that.lang['errorCannotGetDataFromRemote'].format(dataSource.remote));
                         },
                     }, ajaxOptions));
@@ -1146,6 +1154,7 @@
                 value = valueOperator.getter(value, cell, that);
             }
         }
+        if (value === undefined) value = '';
         cell.value = value;
         cell.type = type;
         var spanMap = that.layout.spanMap;
@@ -1215,6 +1224,9 @@
                 that.userConfigs[colId]
             );
             // that.configsCache[colId] = config;
+            if (colIndex === 0 && !that.options.showRowIndex) {
+                config.hidden = true;
+            }
         }
         return config;
     };
@@ -1308,9 +1320,8 @@
             if (isCheckbox) {
                 var $checkbox = $cell.find('.datagrid-checkbox');
                 if (!$checkbox.length) {
-                    $checkbox = $('<div class="checkbox-primary datagrid-checkbox"><label></label></div>').prependTo($cell.addClass('datagrid-has-checkbox'));
+                    $checkbox = $('<div class="checkbox-primary datagrid-checkbox"><label class="content"></label></div>').prependTo($cell.addClass('datagrid-has-checkbox'));
                 }
-                $cell.append('<span class="content"></span>');
             }
         }
 

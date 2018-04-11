@@ -14,6 +14,7 @@ import site.shzu.demo.model.User;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -133,10 +134,18 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
             Map<String, String> resultMap = new HashMap<String, String>();
 			//判断是不是Ajax请求
 			if ("XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"))) {
-				resultMap.put("user_status", "300");
+				/*resultMap.put("user_status", "300");
 				resultMap.put("message", "您已经在其他地方登录，请重新登录！");
-				//输出json串
-				out(response, resultMap);
+                //输出json串
+                out(response, resultMap);*/
+
+                String basePath = request.getScheme() + "://" + request.getServerName() + ":"  + request.getServerPort()+((HttpServletRequest)request).getContextPath();
+                //告诉ajax我是重定向
+                ((HttpServletResponse)response).setHeader("REDIRECT", "REDIRECT");
+                //告诉ajax我重定向的路径
+                System.out.println(basePath);
+                ((HttpServletResponse)response).setHeader("CONTENTPATH", basePath+"/kickout");
+                ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}else{
 				//重定向
 				WebUtils.issueRedirect(request, response, kickoutUrl);
@@ -145,8 +154,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
         }
         return true;
     }
-    private void out(ServletResponse hresponse, Map<String, String> resultMap)
-			throws IOException {
+    private void out(ServletResponse hresponse, Map<String, String> resultMap) throws IOException {
 		try {
 			hresponse.setCharacterEncoding("UTF-8");
 			PrintWriter out = hresponse.getWriter();

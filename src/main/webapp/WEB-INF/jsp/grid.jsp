@@ -9,7 +9,7 @@
     <title>列表</title>
     <!-- zui -->
     <link href="zui/css/zui.min.css" rel="stylesheet">
-    <link href="zui/lib/datagrid/zui.datagrid.min.css" rel="stylesheet">
+    <link href="zui/lib/datagrid/zui.datagrid.css" rel="stylesheet">
     <link href="css/public.css" type="text/css" rel="stylesheet">
 </head>
 <body>
@@ -47,13 +47,28 @@
 <script src="jquery/jquery-3.2.1.min.js"></script>
 <!-- ZUI Javascript组件 -->
 <script src="zui/js/zui.min.js"></script>
-<script src="zui/lib/datagrid/zui.datagrid.min.js"></script>
+<script src="zui/lib/datagrid/zui.datagrid.js"></script>
 <script type="text/javascript">
+
     $("#logout").click(function(){
         location.href="/demo/logout";
     });
 
     $(function(){
+        var jqxhr;
+        //设置ajax请求完成后运行的函数,
+        $.ajaxSetup({
+            complete:function(){
+                if("REDIRECT" == jqxhr.getResponseHeader("REDIRECT")){ //若HEADER中含有REDIRECT说明后端想重定向，
+                    var win = window;
+                    while(win != win.top){
+                        win = win.top;
+                    }
+                    win.location.href = jqxhr.getResponseHeader("CONTENTPATH");//将后端重定向的地址取出来,使用win.location.href去实现重定向的要求
+                }
+            }
+        });
+
         $('#myDataGrid').datagrid({
             dataSource: {
                 cols:[
@@ -74,6 +89,7 @@
                     };
                 },
                 remoteConverter:function (responseData,textStatus,jqXHR,datagrid) {
+                    jqxhr = jqXHR;
                     for(var i = 0;i < responseData.data.length;i++){
                         //添加操作按钮
                         responseData.data[i].operate= '<button class=\"btn btn-sm btn-info \" type=\"button\"><i class=\"icon icon-edit\"></i>编辑</button>';
