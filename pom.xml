@@ -74,6 +74,13 @@
 			<classifier>jdk15</classifier>
 		</dependency>
 
+		<!-- Hutool工具-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>4.0.9</version>
+		</dependency>
+
 		<!-- 数据库相关 -->
 		<!-- mybatis-spring-boot依赖 -->
 		<dependency>

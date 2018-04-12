@@ -139,6 +139,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
                 //输出json串
                 out(response, resultMap);*/
 
+				//在responseHeader里告诉浏览器这个一个重定向
                 String basePath = request.getScheme() + "://" + request.getServerName() + ":"  + request.getServerPort()+((HttpServletRequest)request).getContextPath();
                 //告诉ajax我是重定向
                 ((HttpServletResponse)response).setHeader("REDIRECT", "REDIRECT");
